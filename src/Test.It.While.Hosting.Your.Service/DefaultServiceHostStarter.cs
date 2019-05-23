@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Test.It.Specifications;
 using Test.It.Whil.Hosting.Your.Service;
 
@@ -28,9 +29,9 @@ namespace Test.It.While.Hosting.Your.Service
             _server?.Dispose();
         }
 
-        public async Task StartAsync()
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            await _server.StartAsync();
+            await _server.StartAsync(cancellationToken);
         }
     }
 }

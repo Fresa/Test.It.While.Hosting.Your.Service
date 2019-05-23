@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Test.It.Specifications;
 
@@ -19,6 +20,6 @@ namespace Test.It.While.Hosting.Your.Service
         /// <summary>
         /// Starts the hosting process.
         /// </summary>
-        Task StartAsync();
+        Task StartAsync(CancellationToken cancellationToken = default);
     }
 }

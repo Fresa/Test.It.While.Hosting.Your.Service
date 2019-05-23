@@ -52,6 +52,7 @@ namespace Test.It.While.Hosting.Your.Service
         /// Bootstraps and starts the hosted application.
         /// </summary>
         /// <param name="hostStarter">Service configuration</param>
+        /// <param name="cancellationToken">Cancels the configuration process</param>
         public async Task SetConfigurationAsync(THostStarter hostStarter, CancellationToken cancellationToken = default)
         {
             var controller = hostStarter.Create(new SimpleTestConfigurer(Given), StartParameters);
@@ -78,7 +79,7 @@ namespace Test.It.While.Hosting.Your.Service
                 return Task.CompletedTask;
             };
 
-            await hostStarter.StartAsync();
+            await hostStarter.StartAsync(cancellationToken);
             HandleExceptions();
 
             await WhenAsync(cancellationToken);
@@ -141,11 +142,11 @@ namespace Test.It.While.Hosting.Your.Service
         /// <summary>
         /// OBS! <see cref="ServiceController"/> is not ready here since the application is in bootstrapping phase where you control the service configuration.
         /// </summary>
-        /// <param name="configurer">Service container</param>
-        protected virtual void Given(IServiceContainer configurer) { }
+        /// <param name="serviceContainer">Service container</param>
+        protected virtual void Given(IServiceContainer serviceContainer) { }
 
         /// <summary>
-        /// Application has started and is controlable through <see cref="ServiceController"/>.
+        /// Application has started and is controllable through <see cref="ServiceController"/>.
         /// </summary>
         protected virtual Task WhenAsync(CancellationToken cancellationToken) 
             => Task.CompletedTask;

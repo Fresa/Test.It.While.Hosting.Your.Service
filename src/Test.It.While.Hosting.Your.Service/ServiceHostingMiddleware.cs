@@ -9,7 +9,7 @@ namespace Test.It.While.Hosting.Your.Service
     {
         private readonly IServiceHost _serviceHost;
         private readonly IServiceHostController _serviceHostController;
-        private Func<IDictionary<string, object>, Task> _next;
+        private Func<IDictionary<string, object>, CancellationToken, Task> _next;
 
         public ServiceHostingMiddleware(IServiceHost serviceHost, IServiceHostController serviceHostController)
         {
@@ -17,22 +17,24 @@ namespace Test.It.While.Hosting.Your.Service
             _serviceHostController = serviceHostController;
         }
 
-        public void Initialize(Func<IDictionary<string, object>, Task> next)
+        public void Initialize(Func<IDictionary<string, object>, CancellationToken, Task> next)
         {
             _next = next;
         }
 
-        public async Task Invoke(IDictionary<string, object> environment)
+        public async Task Invoke(IDictionary<string, object> environment, CancellationToken cancellationToken)
         {
-            _serviceHostController.OnStopAsync += async cancellationToken =>
+            _serviceHostController.OnStopAsync += async stopCancellationToken =>
             {
+                var linkedCancellationToken = CancellationTokenSource
+                    .CreateLinkedTokenSource(cancellationToken, stopCancellationToken).Token;
                 try
                 {
-                    var exitCode = await _serviceHost.StopAsync(cancellationToken);
+                    var exitCode = await _serviceHost.StopAsync(linkedCancellationToken);
 
                     _serviceHost.OnUnhandledException -= OnUnhandledException;
 
-                    await _serviceHostController.StoppedAsync(exitCode, cancellationToken);
+                    await _serviceHostController.StoppedAsync(exitCode, linkedCancellationToken);
                 }
                 catch (Exception exception)
                 {
@@ -46,8 +48,8 @@ namespace Test.It.While.Hosting.Your.Service
 
                 _serviceHost.OnUnhandledException += OnUnhandledException;
 
-                var startCode = await _serviceHost.StartAsync(CancellationToken.None, startParameters);
-                await _serviceHostController.StartedAsync(startCode);
+                var startCode = await _serviceHost.StartAsync(cancellationToken, startParameters);
+                await _serviceHostController.StartedAsync(startCode, cancellationToken);
             }
             catch (Exception exception)
             {
@@ -56,7 +58,7 @@ namespace Test.It.While.Hosting.Your.Service
 
             if (_next != null)
             {
-                await _next.Invoke(environment);
+                await _next.Invoke(environment, cancellationToken);
             }
         }
 

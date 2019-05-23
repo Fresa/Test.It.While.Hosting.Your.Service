@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Test.It.Starters;
 using Test.It.While.Hosting.Your.Service;
@@ -26,9 +27,9 @@ namespace Test.It.Whil.Hosting.Your.Service
             return new ServiceTestServer(applicationStarter);
         }
 
-        public async Task StartAsync()
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            await _appBuilder.Build()(_environment);
+            await _appBuilder.Build()(_environment, cancellationToken);
         }
 
         public void Dispose()

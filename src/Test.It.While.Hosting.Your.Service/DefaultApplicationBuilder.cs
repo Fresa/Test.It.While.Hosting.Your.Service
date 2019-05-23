@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Test.It.ApplicationBuilders;
 
@@ -11,7 +12,7 @@ namespace Test.It.While.Hosting.Your.Service
     {
         private readonly ConcurrentQueue<IMiddleware> _middlewares = new ConcurrentQueue<IMiddleware>();
 
-        public Func<IDictionary<string, object>, Task> Build()
+        public Func<IDictionary<string, object>, CancellationToken, Task> Build()
         {
             if (_middlewares.Any() == false)
             {
@@ -21,7 +22,7 @@ namespace Test.It.While.Hosting.Your.Service
             return Builder;
         }
 
-        private async Task Builder(IDictionary<string, object> environment)
+        private async Task Builder(IDictionary<string, object> environment, CancellationToken cancellationToken)
         {
             if (_middlewares.TryDequeue(out var nextMiddleware) == false)
             {
@@ -30,7 +31,7 @@ namespace Test.It.While.Hosting.Your.Service
 
             nextMiddleware.Initialize(Builder);
 
-            await nextMiddleware.Invoke(environment);
+            await nextMiddleware.Invoke(environment, cancellationToken);
         }
 
         public void Use(IMiddleware middleware)

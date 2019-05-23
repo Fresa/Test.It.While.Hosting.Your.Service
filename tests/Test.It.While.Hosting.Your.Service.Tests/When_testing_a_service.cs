@@ -23,7 +23,7 @@ namespace Test.It.While.Hosting.Your.Service.Tests
 
             protected override string[] StartParameters { get; } = { "start" };
 
-            protected override void Given(IServiceContainer configurer)
+            protected override void Given(IServiceContainer serviceContainer)
             {
                 var applicationStatusReporter = A.Fake<IApplicationStatusReporter>();
                 A.CallToSet(() => applicationStatusReporter.HaveStarted).To(true).Invokes(() =>
@@ -31,7 +31,7 @@ namespace Test.It.While.Hosting.Your.Service.Tests
                     _started = true;
                     ServiceController.StopAsync().Wait();
                 });
-                configurer.Register(() => applicationStatusReporter);
+                serviceContainer.Register(() => applicationStatusReporter);
 
                 ServiceController.OnStopped += (code, _) =>
                 {
