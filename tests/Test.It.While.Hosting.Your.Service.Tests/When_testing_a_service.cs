@@ -18,6 +18,7 @@ namespace Test.It.While.Hosting.Your.Service.Tests
         {
             private bool _started;
             private int _exitCode;
+            private int _startedCode;
 
             protected override TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(4);
 
@@ -29,14 +30,18 @@ namespace Test.It.While.Hosting.Your.Service.Tests
                 A.CallToSet(() => applicationStatusReporter.HaveStarted).To(true).Invokes(() =>
                 {
                     _started = true;
-                    ServiceController.StopAsync().Wait();
                 });
                 serviceContainer.Register(() => applicationStatusReporter);
 
-                ServiceController.OnStopped += (code, _) =>
+                ServiceController.OnStoppedAsync += (code, _) =>
                 {
                     _exitCode = code;
                     return Task.CompletedTask;
+                };
+                ServiceController.OnStartedAsync += async (code, cancellationToken) =>
+                {
+                    _startedCode = code;
+                    await ServiceController.StopAsync(cancellationToken);
                 };
             }
 
@@ -44,6 +49,12 @@ namespace Test.It.While.Hosting.Your.Service.Tests
             public void It_should_have_started_the_app()
             {
                 _started.Should().Be.True();
+            }
+
+            [Fact]
+            public void It_should_have_started_the_app_with_start_code()
+            {
+                _startedCode.Should().Equal(2);
             }
 
             [Fact]

@@ -59,10 +59,17 @@ namespace Test.It.While.Hosting.Your.Service
 
             ServiceController = controller.ServiceController;
 
-            controller.OnStopped += async (exitCode, _) =>
+            controller.OnStoppedAsync += async (exitCode, stoppedCancellationToken) =>
             {
-                await _notStartedController.InvokeOnStoppedAsync(exitCode, cancellationToken);
+                await _notStartedController.InvokeOnStoppedAsync(exitCode,
+                    CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, stoppedCancellationToken).Token);
                 _waitForStopped.Release();
+            };
+
+            controller.OnStartedAsync += async (startedCode, startedCancellationToken) =>
+            {
+                await _notStartedController.InvokeOnStartedAsync(startedCode, 
+                    CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, startedCancellationToken).Token);
             };
 
             controller.OnStopAsync += _ =>
@@ -71,7 +78,7 @@ namespace Test.It.While.Hosting.Your.Service
                 return Task.CompletedTask;
             };
             
-            controller.OnUnhandledException += (exception, _) =>
+            controller.OnUnhandledExceptionAsync += (exception, _) =>
             {
                 RegisterException(exception);
                 _waitForStop.Release();

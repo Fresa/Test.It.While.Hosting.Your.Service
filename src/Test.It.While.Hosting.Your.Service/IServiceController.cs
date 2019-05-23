@@ -14,6 +14,11 @@ namespace Test.It.While.Hosting.Your.Service
         /// <summary>
         /// Triggered when the service has stopped.
         /// </summary>
-        event StoppedAsync OnStopped;
+        event StoppedAsync OnStoppedAsync;
+
+        /// <summary>
+        /// Triggered when the service has started.
+        /// </summary>
+        event StartedAsync OnStartedAsync;
     }
 }

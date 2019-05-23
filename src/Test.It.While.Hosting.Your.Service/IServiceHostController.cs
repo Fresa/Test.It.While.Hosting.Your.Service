@@ -23,33 +23,33 @@ namespace Test.It.While.Hosting.Your.Service
         /// <summary>
         /// Triggered when the service has stopped
         /// </summary>
-        event StoppedAsync OnStopped;
+        event StoppedAsync OnStoppedAsync;
 
         /// <summary>
         /// Signal service started
         /// </summary>
-        /// <param name="startCode">The code the service reported after starting</param>
+        /// <param name="startedCode">The code the service reported after starting</param>
         /// <param name="cancellationToken"></param>
-        Task StartedAsync(int startCode, 
+        Task StartedAsync(int startedCode, 
             CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Triggered when the service has started
         /// </summary>
-        event StartedAsync OnStarted;
+        event StartedAsync OnStartedAsync;
 
         /// <summary>
         /// Signal service stopped
         /// </summary>
-        /// <param name="exitCode">The code the service reported when stopped</param>
+        /// <param name="stoppedCode">The code the service reported when stopped</param>
         /// <param name="cancellationToken"></param>
-        Task StoppedAsync(int exitCode, 
+        Task StoppedAsync(int stoppedCode, 
             CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Triggered when an unhandled exception is raised.
         /// </summary>
-        event HandleExceptionAsync OnUnhandledException;
+        event HandleExceptionAsync OnUnhandledExceptionAsync;
 
         /// <summary>
         /// Raises an exception. 

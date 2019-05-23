@@ -11,10 +11,15 @@ namespace Test.It.While.Hosting.Your.Service
         public DefaultServiceController(DefaultServiceHostController hostController)
         {
             _hostController = hostController;
-            _hostController.OnStopped += async (code, cancellationToken) => 
-                await OnStopped.Invoke(code, cancellationToken);
+            _hostController.OnStoppedAsync += async (code, cancellationToken) => 
+                await OnStoppedAsync.Invoke(code, cancellationToken);
             _hostController.OnStopAsync += async cancellationToken => 
-                await OnStop.Invoke(cancellationToken);
+                await OnStopAsync.Invoke(cancellationToken);
+            _hostController.OnStartedAsync += async (code, cancellationToken) =>
+            {
+                if (OnStartedAsync != null)
+                    await OnStartedAsync.Invoke(code, cancellationToken);
+            };
         }
 
         public async Task StopAsync(CancellationToken cancellationToken = default)
@@ -22,7 +27,8 @@ namespace Test.It.While.Hosting.Your.Service
             await _hostController.StopAsync(cancellationToken);
         }
 
-        public event StoppedAsync OnStopped = (code, token) => Task.CompletedTask;
-        public event StopAsync OnStop = token => Task.CompletedTask;
+        public event StoppedAsync OnStoppedAsync = (_, __) => Task.CompletedTask;
+        public event StartedAsync OnStartedAsync;
+        public event StopAsync OnStopAsync = _ => Task.CompletedTask;
     }
 }

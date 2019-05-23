@@ -25,7 +25,7 @@ namespace Test.It.While.Hosting.Your.Service.Tests.Applications
 
             var applicationStatusReporter = _serviceContainer.Resolve<IApplicationStatusReporter>();
             applicationStatusReporter.HaveStarted = true;
-            return 0;
+            return 2;
         }
 
         public int Stop()

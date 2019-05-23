@@ -13,6 +13,7 @@ namespace Test.It.While.Hosting.Your.Service
             ServiceController = new DefaultServiceController(this);
         }
 
+        #region Stop
         private readonly object _stopLock = new object();
         private event StopAsync StopPrivate = token => Task.CompletedTask;
         public event StopAsync OnStopAsync
@@ -37,14 +38,17 @@ namespace Test.It.While.Hosting.Your.Service
         {
             await StopPrivate.Invoke(cancellationToken);
         }
+        #endregion
 
+        #region Stopped
         private readonly object _stoppedLock = new object();
         private bool _stopped;
+        private int _stoppedCode;
         private CancellationToken _stoppedCancelationToken;
 
-        private event StoppedAsync StoppedPrivate = (code, token) => 
+        private event StoppedAsync StoppedPrivate = (_, __) =>
             Task.CompletedTask;
-        public event StoppedAsync OnStopped
+        public event StoppedAsync OnStoppedAsync
         {
             add
             {
@@ -52,7 +56,7 @@ namespace Test.It.While.Hosting.Your.Service
                 {
                     if (_stopped)
                     {
-                        value.Invoke(0, _stoppedCancelationToken);
+                        value.Invoke(_stoppedCode, _stoppedCancelationToken);
                     }
                     StoppedPrivate += value;
                 }
@@ -66,7 +70,7 @@ namespace Test.It.While.Hosting.Your.Service
             }
         }
 
-        public async Task StoppedAsync(int exitCode,
+        public async Task StoppedAsync(int stoppedCode,
             CancellationToken cancellationToken = default)
         {
             lock (_stoppedLock)
@@ -76,15 +80,18 @@ namespace Test.It.While.Hosting.Your.Service
                     return;
                 }
                 _stopped = true;
+                _stoppedCode = stoppedCode;
                 _stoppedCancelationToken = cancellationToken;
             }
 
-            await StoppedPrivate.Invoke(exitCode, cancellationToken);
+            await StoppedPrivate.Invoke(stoppedCode, cancellationToken);
         }
+        #endregion
 
-        private event StartedAsync StartedPrivate = (code, token) =>
+        #region Started
+        private event StartedAsync StartedPrivate = (_, __) =>
             Task.CompletedTask;
-        public event StartedAsync OnStarted
+        public event StartedAsync OnStartedAsync
         {
             add
             {
@@ -92,14 +99,14 @@ namespace Test.It.While.Hosting.Your.Service
                 {
                     if (_started)
                     {
-                        value.Invoke(0);
+                        value.Invoke(_startedCode, _startedCancelationToken);
                     }
                     StartedPrivate += value;
                 }
             }
             remove
             {
-                lock (_stoppedLock)
+                lock (_startedLock)
                 {
                     StartedPrivate -= value;
                 }
@@ -108,8 +115,10 @@ namespace Test.It.While.Hosting.Your.Service
 
         private readonly object _startedLock = new object();
         private bool _started;
+        private int _startedCode;
+        private CancellationToken _startedCancelationToken;
 
-        public async Task StartedAsync(int exitCode,
+        public async Task StartedAsync(int startedCode,
             CancellationToken cancellationToken = default)
         {
             lock (_startedLock)
@@ -119,17 +128,22 @@ namespace Test.It.While.Hosting.Your.Service
                     return;
                 }
                 _started = true;
+                _startedCode = startedCode;
+                _startedCancelationToken = cancellationToken;
             }
-            await StartedPrivate.Invoke(exitCode, cancellationToken);
-        }
 
-        private readonly List<(Exception, CancellationToken)> _exceptionsRaised = 
+            await StartedPrivate.Invoke(startedCode, cancellationToken);
+        }
+        #endregion
+
+        #region ExceptionRaised
+        private readonly List<(Exception, CancellationToken)> _exceptionsRaised =
             new List<(Exception, CancellationToken)>();
         private readonly object _exceptionLock = new object();
 
-        private event HandleExceptionAsync OnExceptionPrivate = (exception, token) => 
+        private event HandleExceptionAsync OnExceptionPrivate = (exception, token) =>
             Task.CompletedTask;
-        public event HandleExceptionAsync OnUnhandledException
+        public event HandleExceptionAsync OnUnhandledExceptionAsync
         {
             add
             {
@@ -161,6 +175,7 @@ namespace Test.It.While.Hosting.Your.Service
 
             await OnExceptionPrivate.Invoke(exception, cancellationToken);
         }
+        #endregion
 
         public IServiceController ServiceController { get; }
     }

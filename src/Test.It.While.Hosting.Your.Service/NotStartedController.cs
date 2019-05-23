@@ -7,10 +7,16 @@ namespace Test.It.While.Hosting.Your.Service
 {
     internal class NotStartedController : IServiceController
     {
-        public async Task InvokeOnStoppedAsync(int exitCode,
+        public async Task InvokeOnStoppedAsync(int stoppedCode,
             CancellationToken cancellationToken = default)
         {
-            await OnStopped.Invoke(exitCode, cancellationToken);
+            await OnStoppedAsync.Invoke(stoppedCode, cancellationToken);
+        }
+
+        public async Task InvokeOnStartedAsync(int startedCode,
+            CancellationToken cancellationToken = default)
+        {
+            await OnStartedAsync.Invoke(startedCode, cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken = default)
@@ -18,6 +24,7 @@ namespace Test.It.While.Hosting.Your.Service
             throw new InvalidOperationException("The server has not yet started and cannot be stopped.");
         }
 
-        public event StoppedAsync OnStopped = (code, token) => Task.CompletedTask;
+        public event StoppedAsync OnStoppedAsync = (code, token) => Task.CompletedTask;
+        public event StartedAsync OnStartedAsync = (code, token) => Task.CompletedTask;
     }
 }
