@@ -3,7 +3,7 @@ A Testing framework that hosts your service during test execution and let you wr
 
 The old deprecated windows service test project can be found here: https://github.com/Fresa/Test.It.While.Hosting.Your.Windows.Service
 
-[![Build status](https://ci.appveyor.com/api/projects/status/1wt1duwbn6kh3yn7?svg=true)](https://ci.appveyor.com/project/Fresa/test-it-while-hosting-your-service)
+[![Build status](https://ci.appveyor.com/api/projects/status/v2shbr85puf808l1?svg=true)](https://ci.appveyor.com/project/Fresa/test-it-while-hosting-your-service)
 
 [![Build history](https://buildstats.info/appveyor/chart/Fresa/test-it-while-hosting-your-service)](https://ci.appveyor.com/project/Fresa/test-it-while-hosting-your-service/history)
 
