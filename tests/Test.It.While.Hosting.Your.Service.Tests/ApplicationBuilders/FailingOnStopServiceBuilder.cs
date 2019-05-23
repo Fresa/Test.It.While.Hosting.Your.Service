@@ -23,7 +23,11 @@ namespace Test.It.While.Hosting.Your.Service.Tests.ApplicationBuilders
                 throw new Exception("Failing to stop");
             }
 
-            public event Action<Exception> OnUnhandledException;
+            public event Action<Exception> OnUnhandledException
+            {
+                add { }
+                remove { }
+            }
         }
     }
 }

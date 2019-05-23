@@ -25,7 +25,11 @@ namespace Test.It.While.Hosting.Your.Service.Tests.ApplicationBuilders
                 return 0;
             }
 
-            public event Action<Exception> OnUnhandledException;
+            public event Action<Exception> OnUnhandledException
+            {
+                add { }
+                remove { }
+            }
         }
     }
 }
