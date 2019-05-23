@@ -6,7 +6,7 @@ namespace Test.It.While.Hosting.Your.Service
     public abstract class DefaultServiceBuilder : IServiceBuilder
     {
         private IServiceConfiguration _configuration = new DefaultServiceConfiguration();
-        public abstract IService Create(ITestConfigurer configurer);
+        public abstract IServiceHost Create(ITestConfigurer configurer);
 
         public IServiceBuilder WithConfiguration(IServiceConfiguration configuration)
         {

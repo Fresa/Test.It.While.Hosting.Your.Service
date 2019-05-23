@@ -9,13 +9,13 @@ namespace Test.It.While.Hosting.Your.Service
     {
         protected abstract TClient Client { get; }
 
-        protected abstract IService Service { get; }
+        protected abstract IServiceHost ServiceHost { get; }
 
         protected abstract IDictionary<string, object> Environment { get; }
 
         public virtual IDictionary<string, object> Start(IApplicationBuilder<TClient> applicationBuilder)
         {
-            applicationBuilder.WithController(Client).Use(new ServiceHostingMiddleware(Service, Client));
+            applicationBuilder.WithController(Client).Use(new ServiceHostingMiddleware(ServiceHost, Client));
             return Environment;
         }
     }

@@ -1,26 +1,27 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Test.It.Specifications;
 
 namespace Test.It.While.Hosting.Your.Service.Tests.ApplicationBuilders
 {
     public class SlowStoppingServiceBuilder : DefaultServiceBuilder
     {
-        public override IService Create(ITestConfigurer configurer)
+        public override IServiceHost Create(ITestConfigurer configurer)
         {
             return new SlowStoppingTestService();
         }
 
-        private class SlowStoppingTestService : IService
+        private class SlowStoppingTestService : IServiceHost
         {
-            public int Start(params string[] args)
+            public Task<int> StartAsync(CancellationToken cancellationToken = default, params string[] args)
             {
-                return 0;
+                return Task.FromResult(0);
             }
 
-            public int Stop()
+            public async Task<int> StopAsync(CancellationToken cancellationToken = default)
             {
-                Thread.Sleep(10000);
+                await Task.Delay(10000, cancellationToken);
                 return 0;
             }
 

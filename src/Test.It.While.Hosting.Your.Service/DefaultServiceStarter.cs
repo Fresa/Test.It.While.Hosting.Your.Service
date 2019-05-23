@@ -5,10 +5,10 @@ namespace Test.It.While.Hosting.Your.Service
     internal class DefaultServiceStarter<TClient> : BaseServiceStarter<TClient>
         where TClient : IServiceHostController
     {
-        public DefaultServiceStarter(IService service, IServiceConfiguration serviceConfiguration, TClient client)
+        public DefaultServiceStarter(IServiceHost serviceHost, IServiceConfiguration serviceConfiguration, TClient client)
         {
             Client = client;
-            Service = service;
+            ServiceHost = serviceHost;
             Environment = new Dictionary<string, object> { { Owin.StartParameters, serviceConfiguration.StartParameters } };
         }
 
@@ -16,6 +16,6 @@ namespace Test.It.While.Hosting.Your.Service
 
         protected override TClient Client { get; }
 
-        protected override IService Service { get; }
+        protected override IServiceHost ServiceHost { get; }
     }
 }

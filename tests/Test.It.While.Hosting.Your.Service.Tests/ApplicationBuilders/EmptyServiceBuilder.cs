@@ -1,24 +1,26 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Test.It.While.Hosting.Your.Service.Tests.ApplicationBuilders
 {
     public class EmptyServiceBuilder : DefaultServiceBuilder
     {
-        public override IService Create(It.Specifications.ITestConfigurer configurer)
+        public override IServiceHost Create(It.Specifications.ITestConfigurer configurer)
         {
             return new EmptyService();
         }
 
-        private class EmptyService : IService
+        private class EmptyService : IServiceHost
         {
-            public int Start(params string[] args)
+            public Task<int> StartAsync(CancellationToken cancellationToken = default, params string[] args)
             {
-                return 0;
+                return Task.FromResult(0);
             }
 
-            public int Stop()
+            public Task<int> StopAsync(CancellationToken cancellationToken = default)
             {
-                return 0;
+                return Task.FromResult(0);
             }
 
             public event Action<Exception> OnUnhandledException;
