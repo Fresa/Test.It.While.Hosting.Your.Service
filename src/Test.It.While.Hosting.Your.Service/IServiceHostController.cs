@@ -36,7 +36,7 @@ namespace Test.It.While.Hosting.Your.Service
         /// <summary>
         /// Triggered when the service has started
         /// </summary>
-        event StartedHandler OnStarted;
+        event StartedAsync OnStarted;
 
         /// <summary>
         /// Signal service stopped

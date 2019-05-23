@@ -82,9 +82,9 @@ namespace Test.It.While.Hosting.Your.Service
             await StoppedPrivate.Invoke(exitCode, cancellationToken);
         }
 
-        private event StartedHandler StartedPrivate = (code, token) =>
+        private event StartedAsync StartedPrivate = (code, token) =>
             Task.CompletedTask;
-        public event StartedHandler OnStarted
+        public event StartedAsync OnStarted
         {
             add
             {
