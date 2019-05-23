@@ -8,13 +8,13 @@ namespace Test.It.While.Hosting.Your.Service
     internal class ServiceHostingMiddleware : IMiddleware
     {
         private readonly IServiceHost _serviceHost;
-        private readonly IServiceHostController _hostController;
+        private readonly IServiceHostController _serviceHostController;
         private Func<IDictionary<string, object>, Task> _next;
 
-        public ServiceHostingMiddleware(IServiceHost serviceHost, IServiceHostController hostController)
+        public ServiceHostingMiddleware(IServiceHost serviceHost, IServiceHostController serviceHostController)
         {
             _serviceHost = serviceHost;
-            _hostController = hostController;
+            _serviceHostController = serviceHostController;
         }
 
         public void Initialize(Func<IDictionary<string, object>, Task> next)
@@ -24,7 +24,7 @@ namespace Test.It.While.Hosting.Your.Service
 
         public async Task Invoke(IDictionary<string, object> environment)
         {
-            _hostController.OnStopAsync += async cancellationToken =>
+            _serviceHostController.OnStopAsync += async cancellationToken =>
             {
                 try
                 {
@@ -32,7 +32,7 @@ namespace Test.It.While.Hosting.Your.Service
 
                     _serviceHost.OnUnhandledException -= OnUnhandledException;
 
-                    await _hostController.StoppedAsync(exitCode, cancellationToken);
+                    await _serviceHostController.StoppedAsync(exitCode, cancellationToken);
                 }
                 catch (Exception exception)
                 {
@@ -47,7 +47,7 @@ namespace Test.It.While.Hosting.Your.Service
                 _serviceHost.OnUnhandledException += OnUnhandledException;
 
                 var startCode = await _serviceHost.StartAsync(CancellationToken.None, startParameters);
-                await _hostController.StartedAsync(startCode);
+                await _serviceHostController.StartedAsync(startCode);
             }
             catch (Exception exception)
             {
@@ -62,7 +62,7 @@ namespace Test.It.While.Hosting.Your.Service
 
         private void OnUnhandledException(Exception exception)
         {
-            _hostController.RaiseExceptionAsync(exception);
+            _serviceHostController.RaiseExceptionAsync(exception);
         }
     }
 }
