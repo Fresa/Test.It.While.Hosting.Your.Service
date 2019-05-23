@@ -9,7 +9,7 @@ namespace Test.It.While.Hosting.Your.Service
         {
             Client = client;
             ServiceHost = serviceHost;
-            Environment = new Dictionary<string, object> { { Owin.StartParameters, serviceConfiguration.StartParameters } };
+            Environment = new Dictionary<string, object> { { Service.EnvironmentKeys.StartParameters, serviceConfiguration.StartParameters } };
         }
 
         protected override IDictionary<string, object> Environment { get; }

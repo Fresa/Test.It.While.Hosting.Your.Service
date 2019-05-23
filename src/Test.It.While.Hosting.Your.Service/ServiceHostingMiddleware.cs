@@ -44,7 +44,7 @@ namespace Test.It.While.Hosting.Your.Service
 
             try
             {
-                var startParameters = environment[Owin.StartParameters] as string[] ?? new string[0];
+                var startParameters = environment[EnvironmentKeys.StartParameters] as string[] ?? new string[0];
 
                 _serviceHost.OnUnhandledException += OnUnhandledException;
 
