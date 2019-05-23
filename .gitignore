@@ -1,0 +1,15 @@
+src/Test.It.While.Hosting.Your.Windows.Service/bin/
+src/Test.It.While.Hosting.Your.Windows.Service/obj/
+tests/Test.It.While.Hosting.Your.Windows.Service.Tests/obj/
+tests/Test.It.While.Hosting.Your.Windows.Service.Tests/bin/
+packages/
+!tools/**
+.vs/
+Test.It.While.Hosting.Your.Windows.Service.v3.ncrunchsolution
+tests/Test.It.While.Hosting.Your.Windows.Service.Tests/Test.It.While.Hosting.Your.Windows.Service.Tests.v3.ncrunchproject
+Test.It.While.Hosting.Your.Windows.Service.v3.ncrunchsolution.user
+_NCrunch_Test.It.While.Hosting.Your.Windows.Service/
+src/Test.It.While.Hosting.Your.Service/bin/
+src/Test.It.While.Hosting.Your.Service/obj/
+tests/Test.It.While.Hosting.Your.Service.Tests/bin/
+tests/Test.It.While.Hosting.Your.Service.Tests/obj/

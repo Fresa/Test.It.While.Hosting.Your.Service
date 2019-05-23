@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net47</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="FakeItEasy" version="3.3.2" />
+        <PackageReference Include="ShouldFluent" version="1.1.19" />
+        <PackageReference Include="Test.It" version="2.0.2" />
+        <PackageReference Include="xunit" version="2.2.0" />
+        <PackageReference Include="xunit.extensibility.core" Version="2.2.0" />
+        <PackageReference Include="xunit.extensibility.execution" Version="2.2.0" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Test.It.While.Hosting.Your.Service\Test.It.While.Hosting.Your.Service.csproj" />
+    </ItemGroup>
+</Project>

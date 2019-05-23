@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageReleaseNotes />
+    <PackageVersion></PackageVersion>
+    <Version>1.0.0</Version>
+    <Authors>Fredrik Arvidsson</Authors>
+    <Company>FKAN Consulting AB</Company>
+    <PackageTags>Test Testing Service Hosting</PackageTags>
+    <Description>Testing framework that hosts your service during test execution</Description>
+    <RepositoryUrl>https://github.com/Fresa/Test.It.While.Hosting.Your.Service</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/Fresa/Test.It.While.Hosting.Your.Service/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Copyright © 2017 Fredrik Arvidsson</Copyright>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Test.It" version="2.0.2" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63102-01" PrivateAssets="All" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(NCrunch)' == '1'">
+    <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
+  </PropertyGroup>
+</Project>
